@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>GLA Mapa do Tesouro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>GLA - Localizador de Tesouro</h1>
+    <form method="post" action="/upload" enctype="multipart/form-data">
+        <input type="file" name="screenshot" required>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
