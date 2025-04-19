@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>GLA Mapa do Tesouro</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Mapa do Tesouro - GLA</title>
 </head>
 <body>
-    <h1>GLA - Localizador de Tesouro</h1>
-    <form method="post" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="screenshot" required>
-        <button type="submit">Enviar</button>
+    <h1>Selecione a Ilha do Tesouro</h1>
+    <form method="POST">
+        <select name="island" required>
+            <option value="">-- Escolha uma ilha --</option>
+            {% for island in islands %}
+                <option value="{{ island }}">{{ island }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Avançar</button>
     </form>
 </body>
 </html>
