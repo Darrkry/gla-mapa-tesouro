@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload de Mapa - {{ island }}</title>
+</head>
+<body>
+    <h1>Ilha selecionada: {{ island }}</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Envie a imagem da prévia do mapa do tesouro:</label><br><br>
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
