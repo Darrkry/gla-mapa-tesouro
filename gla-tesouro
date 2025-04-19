@@ -1,0 +1,73 @@
+├── app.py
+├── requirements.txt
+├── templates/
+│   └── index.html
+├── static/
+│   └── style.css
+
+# app.py
+from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+import os
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'screenshot' not in request.files:
+        return 'Nenhum arquivo enviado', 400
+    file = request.files['screenshot']
+    if file.filename == '':
+        return 'Nome de arquivo vazio', 400
+
+    filename = secure_filename(file.filename)
+    path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(path)
+
+    # Aqui futuramente: código para processar e localizar o tesouro
+
+    return f'Tesouro localizado na área: <b>Alabasta East</b> (exemplo)'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+# requirements.txt
+Flask==2.2.5
+
+
+# templates/index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Localizador de Tesouros - Grand Line</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Envie a Screenshot do Mapa do Tesouro</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="screenshot" required>
+        <button type="submit">Localizar Tesouro</button>
+    </form>
+</body>
+</html>
+
+
+# static/style.css
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding-top: 50px;
+}
+
+input, button {
+    margin: 10px;
+    padding: 10px;
+    font-size: 16px;
+}
