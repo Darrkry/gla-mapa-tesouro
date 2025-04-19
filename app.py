@@ -1,27 +1,31 @@
 from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.utils import secure_filename
-import os
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-@app.route('/')
+# Lista de ilhas permitidas
+ISLANDS = [
+    "Lost Islant", "Gunkan Island", "Whisky Peak", "Little Garden", "Jaya Island",
+    "G-7 Marine Base", "Drum Island", "Nanimonai Island", "Nige Hashiru Island",
+    "Alabasta Weast", "Alabasta East"
+]
+
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template('index.html')
+    if request.method == "POST":
+        selected_island = request.form.get("island")
+        if not selected_island:
+            return redirect(url_for("index"))
+        return redirect(url_for("upload", island=selected_island))
+    return render_template("index.html", islands=ISLANDS)
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'screenshot' not in request.files:
-        return 'Nenhum arquivo enviado', 400
-    file = request.files['screenshot']
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
-    return f'Arquivo {filename} recebido com sucesso!'
-    
-import os
+@app.route("/upload/<island>", methods=["GET", "POST"])
+def upload(island):
+    if request.method == "POST":
+        file = request.files.get("file")
+        if file:
+            # salvar ou processar a imagem aqui depois
+            return f"Imagem recebida para a ilha {island}!"
+    return render_template("upload.html", island=island)
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
